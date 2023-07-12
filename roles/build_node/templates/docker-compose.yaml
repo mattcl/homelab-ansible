@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  worker:
+    hostname: {{ worker_name }}
+    image: concourse/concourse:7.9.1
+    command:
+      - worker
+      - "--containerd-dns-server='192.168.20.193'"
+    privileged: true
+    volumes: ["/opt/concourse/keys:/concourse-keys"]
+    stop_signal: SIGUSR2
+    environment:
+      CONCOURSE_TSA_HOST: ci.papercode.net:2222
+      CONCOURSE_TAG: "{{ worker_tags }}"
+      CONCOURSE_CONTAINERD_DNS_SERVER: "192.168.20.193"
+      CONCOURSE_GARDEN_DNS_SERVER: "192.168.20.193"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart: unless-stopped

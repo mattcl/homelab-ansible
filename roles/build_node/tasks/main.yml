@@ -1,0 +1,35 @@
+---
+- name: Create key dir
+  file:
+    dest: /opt/concourse/keys
+    state: directory
+
+- name: Create tsa_host_key file
+  copy:
+    src: keys/tsa_host_key.pub
+    dest: /opt/concourse/keys/tsa_host_key.pub
+    decrypt: yes
+    force: no
+
+- name: Create worker_key file
+  copy:
+    src: keys/worker_key
+    dest: /opt/concourse/keys/worker_key
+    decrypt: yes
+    force: no
+
+- name: Create service dir
+  file:
+    dest: /home/matt/services/concourse-worker
+    state: directory
+    owner: matt
+    group: matt
+
+- name: Create compose file
+  template:
+    src: docker-compose.yaml
+    dest: /home/matt/services/concourse-worker/docker-compose.yaml
+    owner: matt
+    group: matt
+    mode: '0644'
+    force: no

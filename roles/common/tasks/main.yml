@@ -1,0 +1,14 @@
+---
+- name: Install common dependencies
+  apt:
+    pkg:
+      - curl
+      - git
+      - htop
+      - lm-sensors
+      - tmux
+      - vim
+      - wget
+      - zsh
+    state: latest
+    update_cache: true

@@ -1,0 +1,8 @@
+---
+- name: Configure build nodes
+  hosts: build_nodes
+  become: true
+  roles:
+    - common
+    - docker
+    - build_node

@@ -1,0 +1,17 @@
+---
+build_nodes:
+  hosts:
+    dinyol-hei.home:
+      worker_name: dinyol-hei
+      worker_tags: "internal,packager,ser6,7735HS"
+    ethics-gradient.home:
+      worker_name: ethics-gradient
+      worker_tags: "internal,packager,ser6,7735HS"
+    little-rascal.home:
+      worker_name: little-rascal
+      worker_tags: "internal,packager,eq12,N305"
+
+tailscale:
+  hosts:
+    grey-area.home:
+      name: grey-area

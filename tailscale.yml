@@ -1,0 +1,7 @@
+---
+- name: Configure build nodes
+  hosts: tailscale
+  become: true
+  roles:
+    - common
+    - tailscale
