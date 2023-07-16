@@ -48,7 +48,7 @@ resources:
       paths:
         - "docker/*"
 
-  - name: 22.04-image
+  - name: ubuntu-22.04
     type: registry-image
     icon: docker
     source:
@@ -65,7 +65,7 @@ resources:
       concourse_url: ((server.url))
 
 jobs:
-  - name: build-22.04-image
+  - name: build-ubuntu-22.04
     <<: *job-common
     plan:
       - get: homelab-ansible-docker
@@ -90,7 +90,7 @@ jobs:
           run:
             path: build
 
-      - put: 22.04-image
+      - put: ubuntu-22.04
         params:
           image: image/image.tar
 
@@ -99,10 +99,10 @@ jobs:
     plan:
       - get: homelab-ansible
         trigger: true
-      - get: 22.04-image
+      - get: ubuntu-22.04
         trigger: false
         passed:
-          - build-22.04-image
+          - build-ubuntu-22.04
 
       - task: converge
         image: homelab-ansible-docker
