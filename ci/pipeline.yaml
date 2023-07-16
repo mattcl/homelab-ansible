@@ -106,7 +106,9 @@ jobs:
 
       - task: converge
         image: homelab-ansible-docker
-        file: converge.yaml
+        file: homelab-ansible/ci/converge.yaml
+        input_mapping:
+          - repo: homelab-ansible
         params:
           CREATE_USER: matt
           ROLE: build_node.yml
