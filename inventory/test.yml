@@ -2,8 +2,11 @@ build_nodes:
   hosts:
     localhost:
       ansible_connection: local
+      worker_name: test-worker
+      worker_tags: "testonly"
 
 tailscale:
   hosts:
     localhost:
       ansible_connection: local
+      name: test-node
