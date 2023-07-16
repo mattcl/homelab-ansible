@@ -1,0 +1,113 @@
+resource_types:
+  - name: slack-alert
+    type: registry-image
+    source:
+      repository: arbourd/concourse-slack-alert-resource
+
+# common flags we want to set on all jobs
+job-common-settings: &job-common
+  build_log_retention:
+    days: 2
+    builds: 20
+    minimum_succeeded_builds: 1
+  on_success:
+    put: notify
+    params:
+      alert_type: success
+  on_failure:
+    put: notify
+    params:
+      alert_type: failed
+  on_abort:
+    put: notify
+    params:
+      alert_type: aborted
+  on_error:
+    put: notify
+    params:
+      alert_type: errored
+
+resources:
+  # the user-specified repo under test
+  - name: homelab-ansible
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:mattcl/homelab-ansible.git
+      private_key: ((github.private-key))
+      ignore_paths:
+        - "README.md"
+        - "docker/*"
+
+  - name: homelab-ansible-docker
+    type: git
+    icon: github
+    source:
+      uri: git@github.com:mattcl/homelab-ansible.git
+      private_key: ((github.private-key))
+      paths:
+        - "docker/*"
+
+  - name: 22.04-image
+    type: registry-image
+    icon: docker
+    source:
+      repository: mattcl/ansible-ci
+      tag: "22.04"
+      username: ((dockerhub.user))
+      password: ((dockerhub.token))
+
+  - name: notify
+    type: slack-alert
+    source:
+      url: ((slack.webhook-url))
+      channel: ((slack.channel))
+      concourse_url: ((server.url))
+
+jobs:
+  - name: build-22.04-image
+    <<: *job-common
+    plan:
+      - get: homelab-ansible-docker
+        trigger: true
+
+      - task: build
+        privileged: true
+        tags:
+          - internal
+        config:
+          platform: linux
+          image_resource:
+            type: registry-image
+            source:
+              repository: concourse/oci-build-task
+          inputs:
+            - name: homelab-ansible-image
+          outputs:
+            - name: image
+          params:
+            DOCKERFILE: homelab-ansible-image/docker/ubuntu-22.04.Dockerfile
+          run:
+            path: build
+
+      - put: 22.04-image
+        params:
+          image: image/image.tar
+
+  - name: converge-build_node
+    <<: *job-common
+    plan:
+      - get: homelab-ansible
+        trigger: true
+      - get: 22.04-image
+        trigger: false
+        passed:
+          - build-22.04-image
+
+      - task: converge
+        image: homelab-ansible-docker
+        file: converge.yaml
+        params:
+          CREATE_USER: matt
+          ROLE: build_node.yml
+          VAULT_PASSWORD: ((vault-password))

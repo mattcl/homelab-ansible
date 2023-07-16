@@ -1,0 +1,9 @@
+build_nodes:
+  hosts:
+    localhost:
+      ansible_connection: local
+
+tailscale:
+  hosts:
+    localhost:
+      ansible_connection: local
