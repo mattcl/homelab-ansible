@@ -1,14 +1,26 @@
 ---
-- name: Install common dependencies
+- name: Install common tools dependencies
   apt:
     pkg:
       - curl
+      - exa
       - git
       - htop
       - lm-sensors
+      - powertop
+      - ripgrep
       - tmux
+      - unzip
       - vim
       - wget
       - zsh
     state: latest
     update_cache: true
+
+- name: Dust
+  import_tasks:
+    file: dust.yml
+
+- name: Rust
+  import_tasks:
+    file: rust.yml
