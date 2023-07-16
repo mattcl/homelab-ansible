@@ -65,7 +65,8 @@ resources:
     source:
       start: 12:00 AM
       stop: 1:00 AM
-      localtion: America/Los_Angeles
+      location: America/Los_Angeles
+      initial_version: true
 
   - name: notify
     type: slack-alert
