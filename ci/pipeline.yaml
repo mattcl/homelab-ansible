@@ -45,6 +45,7 @@ resources:
     source:
       uri: git@github.com:mattcl/homelab-ansible.git
       private_key: ((github.private-key))
+      branch: master
       paths:
         - "docker/*"
 
@@ -82,11 +83,11 @@ jobs:
             source:
               repository: concourse/oci-build-task
           inputs:
-            - name: homelab-ansible-image
+            - name: homelab-ansible-docker
           outputs:
             - name: image
           params:
-            DOCKERFILE: homelab-ansible-image/docker/ubuntu-22.04.Dockerfile
+            DOCKERFILE: homelab-ansible-docker/docker/ubuntu-22.04.Dockerfile
           run:
             path: build
 
