@@ -98,12 +98,13 @@ jobs:
   - name: converge-build_node
     <<: *job-common
     plan:
-      - get: homelab-ansible
-        trigger: true
-      - get: ubuntu-22.04
-        trigger: false
-        passed:
-          - build-ubuntu-22.04
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - build-ubuntu-22.04
 
       - task: converge
         tags:
@@ -115,4 +116,27 @@ jobs:
         params:
           CREATE_USER: matt
           ROLE: build_node.yml
+          VAULT_PASSWORD: ((vault-password))
+
+  - name: converge-tailscale
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - build-ubuntu-22.04
+
+      - task: converge
+        tags:
+          - internal
+        image: ubuntu-22.04
+        file: homelab-ansible/ci/converge.yaml
+        input_mapping:
+          repo: homelab-ansible
+        params:
+          CREATE_USER: matt
+          ROLE: tailscale.yml
           VAULT_PASSWORD: ((vault-password))
