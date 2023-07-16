@@ -61,6 +61,7 @@ resources:
 
   - name: nightly-trigger
     type: time
+    icon: alarm
     source:
       start: 12:00 AM
       stop: 1:00 AM
@@ -68,6 +69,7 @@ resources:
 
   - name: notify
     type: slack-alert
+    icon: slack
     source:
       url: ((slack.webhook-url))
       channel: ((slack.channel))
