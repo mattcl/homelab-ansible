@@ -108,7 +108,7 @@ jobs:
       - task: converge
         tags:
           - internal
-        image: homelab-ansible-docker
+        image: ubuntu-22.04
         file: homelab-ansible/ci/converge.yaml
         input_mapping:
           repo: homelab-ansible
