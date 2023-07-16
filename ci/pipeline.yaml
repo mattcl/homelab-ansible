@@ -28,7 +28,6 @@ job-common-settings: &job-common
       alert_type: errored
 
 resources:
-  # the user-specified repo under test
   - name: homelab-ansible
     type: git
     icon: github
@@ -39,6 +38,8 @@ resources:
         - "README.md"
         - "docker/*"
 
+  # we separate these so that we don't always trigger the image build when we
+  # push to the repo
   - name: homelab-ansible-docker
     type: git
     icon: github
@@ -57,6 +58,13 @@ resources:
       tag: "22.04"
       username: ((dockerhub.user))
       password: ((dockerhub.token))
+
+  - name: nightly-trigger
+    type: time
+    source:
+      start: 12:00 AM
+      stop: 1:00 AM
+      localtion: America/Los_Angeles
 
   - name: notify
     type: slack-alert
@@ -105,6 +113,8 @@ jobs:
           trigger: false
           passed:
             - build-ubuntu-22.04
+        - get: nightly-trigger
+          trigger: true
 
       - task: converge
         tags:
@@ -128,6 +138,8 @@ jobs:
           trigger: false
           passed:
             - build-ubuntu-22.04
+        - get: nightly-trigger
+          trigger: true
 
       - task: converge
         tags:
