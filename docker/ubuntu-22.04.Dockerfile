@@ -7,4 +7,4 @@ RUN apt update && \
     python3 \
     python3-pip \
     sudo \
-    && python3 -m pip install ansible
+    && python3 -m pip install ansible ansible-lint
