@@ -23,7 +23,7 @@
     dest: "/tmp/{{ item.key }}"
 
 - name: Install {{ item.key }} to /usr/local/bin/
-  command: "chmod +x {{ item.value.target }} && mv {{ item.value.target }} /usr/local/bin/{{ item.value.name }}"
+  shell: "chmod +x {{ item.value.target }} && mv {{ item.value.target }} /usr/local/bin/{{ item.value.name }}"
   args:
     chdir: "/tmp/{{ item.key }}"
   when: "not check_bin.stat.exists"
