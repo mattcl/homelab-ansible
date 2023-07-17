@@ -1,31 +1,32 @@
 ---
 - name: Install tailscale dependencies
-  apt:
+  ansible.builtin.apt:
     pkg:
       - ca-certificates
       - curl
       - gnupg
-    state: latest
+    state: present
     update_cache: true
 
 - name: Add Tailscale GPG apt Key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://pkgs.tailscale.com/stable/ubuntu/jammy.noarmor.gpg
     state: present
 
 - name: Add Tailscale Repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://pkgs.tailscale.com/stable/ubuntu jammy main
     state: present
 
 - name: Update apt and install Tailscale
-  apt:
+  ansible.builtin.apt:
     pkg:
       - tailscale
     state: present
     update_cache: true
 
-- name: make Tailscale conf
-  copy:
+- name: Make Tailscale conf
+  ansible.builtin.copy:
     src: 99-tailscale.conf
     dest: /etc/sysctl.d/99-tailscale.conf
+    mode: "0644"

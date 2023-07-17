@@ -1,7 +1,8 @@
 ---
 - name: Make home bin dir
-  file:
+  ansible.builtin.file:
     dest: /home/matt/bin
     state: directory
     owner: matt
     group: matt
+    mode: "0777"

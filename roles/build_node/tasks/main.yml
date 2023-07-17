@@ -1,35 +1,39 @@
 ---
 - name: Create key dir
-  file:
+  ansible.builtin.file:
     dest: /opt/concourse/keys
     state: directory
+    mode: "0777"
 
 - name: Create tsa_host_key file
-  copy:
+  ansible.builtin.copy:
     src: keys/tsa_host_key.pub
     dest: /opt/concourse/keys/tsa_host_key.pub
-    decrypt: yes
-    force: no
+    mode: "0644"
+    decrypt: true
+    force: false
 
 - name: Create worker_key file
-  copy:
+  ansible.builtin.copy:
     src: keys/worker_key
     dest: /opt/concourse/keys/worker_key
-    decrypt: yes
-    force: no
+    mode: "0644"
+    decrypt: true
+    force: false
 
 - name: Create service dir
-  file:
+  ansible.builtin.file:
     dest: /home/matt/services/concourse-worker
     state: directory
     owner: matt
     group: matt
+    mode: "0777"
 
 - name: Create compose file
-  template:
+  ansible.builtin.template:
     src: docker-compose.yaml
     dest: /home/matt/services/concourse-worker/docker-compose.yaml
     owner: matt
     group: matt
-    mode: '0644'
-    force: no
+    mode: "0644"
+    force: false

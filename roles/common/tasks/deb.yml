@@ -1,16 +1,18 @@
 ---
-- name: Check if {{ item.key }} is installed
-  command: dpkg-query -W {{ item.value.name }}
+- name: Check if installed
+  ansible.builtin.command: dpkg-query -W {{ item.value.name }}
   register: "check_deb"
   failed_when: "check_deb.rc > 1"
   changed_when: "check_deb.rc == 1"
 
-- name: Download {{ item.key }}
-  get_url:
-    url="{{ item.value.release }}"
-    dest="/tmp/{{ item.value.file }}"
+- name: Download deb
+  ansible.builtin.get_url:
+    url: "{{ item.value.release }}"
+    dest: "/tmp/{{ item.value.file }}"
+    mode: "0644"
   when: "check_deb.rc == 1"
 
-- name: Install {{ item.key }}
-  apt: deb="/tmp/{{ item.value.file }}"
+- name: Install
+  ansible.builtin.apt:
+    deb: "/tmp/{{ item.value.file }}"
   when: "check_deb.rc == 1"

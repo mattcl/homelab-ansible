@@ -1,25 +1,25 @@
 ---
 - name: Install docker dependencies
-  apt:
+  ansible.builtin.apt:
     pkg:
       - ca-certificates
       - curl
       - gnupg
-    state: latest
+    state: present
     update_cache: true
 
 - name: Add Docker GPG apt Key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
 
 - name: Add Docker Repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu jammy stable
     state: present
 
 - name: Update apt and install docker
-  apt:
+  ansible.builtin.apt:
     pkg:
       - docker-ce
       - docker-ce-cli
@@ -30,7 +30,7 @@
     update_cache: true
 
 - name: Add matt to docker group
-  user:
+  ansible.builtin.user:
     name: matt
     groups: docker
-    append: yes
+    append: true

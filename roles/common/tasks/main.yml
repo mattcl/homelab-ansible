@@ -1,6 +1,6 @@
 ---
 - name: Install common tools dependencies
-  apt:
+  ansible.builtin.apt:
     pkg:
       - bat
       - curl
@@ -16,20 +16,20 @@
       - vim
       - wget
       - zsh
-    state: latest
+    state: present
     update_cache: true
 
 - name: Install deb releases
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: deb.yml
   loop: "{{ common_internal.deb_releases | combine(common.deb_releases | default({}), recursive=True) | dict2items }}"
 
 - name: Install tar releases
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: tar.yml
   loop: "{{ common.tar_releases | dict2items }}"
   when: common.tar_releases is defined
 
 - name: Rust
-  import_tasks:
+  ansible.builtin.import_tasks:
     file: rust.yml
