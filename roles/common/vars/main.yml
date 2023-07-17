@@ -1,5 +1,5 @@
 ---
-common:
+common_internal:
   deb_releases:
     dust:
       name: "du-dust"

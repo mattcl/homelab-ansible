@@ -1,5 +1,5 @@
 ---
-build_nodes:
+build_node:
   hosts:
     dinyol-hei.home:
       worker_name: dinyol-hei

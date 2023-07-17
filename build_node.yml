@@ -1,6 +1,6 @@
 ---
 - name: Configure build nodes
-  hosts: build_nodes
+  hosts: build_node
   become: true
   roles:
     - build_node

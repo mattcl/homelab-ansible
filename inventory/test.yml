@@ -1,4 +1,4 @@
-build_nodes:
+build_node:
   hosts:
     localhost:
       ansible_connection: local
