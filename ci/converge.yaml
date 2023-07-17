@@ -6,7 +6,7 @@ inputs:
 params:
   VAULT_PASSWORD:
   CREATE_USER:
-  ROLE:
+  PLAYBOOK:
 
 run:
   dir: repo

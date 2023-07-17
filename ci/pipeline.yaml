@@ -128,7 +128,7 @@ jobs:
           repo: homelab-ansible
         params:
           CREATE_USER: matt
-          ROLE: build_node.yml
+          PLAYBOOK: build_node.yml
           VAULT_PASSWORD: ((vault-password))
 
   - name: converge-tailscale
@@ -153,5 +153,5 @@ jobs:
           repo: homelab-ansible
         params:
           CREATE_USER: matt
-          ROLE: tailscale.yml
+          PLAYBOOK: tailscale.yml
           VAULT_PASSWORD: ((vault-password))

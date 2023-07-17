@@ -1,0 +1,35 @@
+---
+- name: Check if {{ item.key }} is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/{{ item.value.name }}
+  register: "check_bin"
+  changed_when: "not check_bin.stat.exists"
+
+- name: Make scratch dir
+  file:
+    dest: "/tmp/{{ item.key }}"
+    state: directory
+  when: "not check_bin.stat.exists"
+
+- name: Download {{ item.key }}
+  get_url:
+    url="{{ item.value.release }}"
+    dest="/tmp/{{ item.key }}/{{ item.value.file }}"
+  when: "not check_bin.stat.exists"
+
+- name: Extract {{ item.key }}
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ item.key }}/{{ item.value.file }}"
+    dest: "/tmp/{{ item.key }}"
+
+- name: Install {{ item.key }} to /usr/local/bin/
+  command: "chmod +x {{ item.value.target }} && mv {{ item.value.target }} /usr/local/bin/{{ item.value.name }}"
+  args:
+    chdir: "/tmp/{{ item.key }}"
+  when: "not check_bin.stat.exists"
+
+- name: Cleanup scratch dir
+  file:
+    dest: "/tmp/{{ item.key }}"
+    state: absent
+  when: "not check_bin.stat.exists"

@@ -1,0 +1,7 @@
+---
+- name: Make home bin dir
+  file:
+    dest: /home/matt/bin
+    state: directory
+    owner: matt
+    group: matt

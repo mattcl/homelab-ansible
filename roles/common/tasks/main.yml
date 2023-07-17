@@ -24,6 +24,11 @@
     file: deb.yml
   loop: "{{ common.deb_releases | dict2items }}"
 
+- name: Install tar releases
+  include_tasks:
+    file: tar.yml
+  loop: "{{ common.tar_releases | dict2items }}"
+
 - name: Rust
   import_tasks:
     file: rust.yml
