@@ -23,11 +23,13 @@
   include_tasks:
     file: deb.yml
   loop: "{{ common.deb_releases | dict2items }}"
+  when: common.deb_releases is defined
 
 - name: Install tar releases
   include_tasks:
     file: tar.yml
   loop: "{{ common.tar_releases | dict2items }}"
+  when: common.tar_releases is defined
 
 - name: Rust
   import_tasks:
