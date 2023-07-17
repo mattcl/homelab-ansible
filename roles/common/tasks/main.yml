@@ -22,7 +22,7 @@
 - name: Install deb releases
   include_tasks:
     file: deb.yml
-  loop: {{ common.deb_releases | dict2items }}
+  loop: "{{ common.deb_releases }}"
 
 - name: Rust
   import_tasks:
