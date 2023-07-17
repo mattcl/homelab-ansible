@@ -1,0 +1,6 @@
+---
+- name: Configure dev box nodes
+  hosts: dev_box
+  become: true
+  roles:
+    - dev_box

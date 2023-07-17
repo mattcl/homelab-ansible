@@ -131,6 +131,31 @@ jobs:
           PLAYBOOK: build_node.yml
           VAULT_PASSWORD: ((vault-password))
 
+  - name: converge-dev-box
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - build-ubuntu-22.04
+        - get: nightly-trigger
+          trigger: true
+
+      - task: converge
+        tags:
+          - internal
+        image: ubuntu-22.04
+        file: homelab-ansible/ci/converge.yaml
+        input_mapping:
+          repo: homelab-ansible
+        params:
+          CREATE_USER: matt
+          PLAYBOOK: dev_box.yml
+          VAULT_PASSWORD: ((vault-password))
+
   - name: converge-tailscale
     <<: *job-common
     plan:
