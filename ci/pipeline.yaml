@@ -131,7 +131,8 @@ jobs:
           PLAYBOOK: build_node.yml
           VAULT_PASSWORD: ((vault-password))
 
-  - name: converge-dev-box
+  - name: converge-dev_box
+    old_name: converge-dev-box
     <<: *job-common
     plan:
       - in_parallel:
