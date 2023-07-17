@@ -1,18 +1,18 @@
 build_node:
   hosts:
-    localhost:
+    localhost_build_node:
       ansible_connection: local
       worker_name: test-worker
       worker_tags: "testonly"
 
 dev_box:
   hosts:
-    localhost:
+    localhost_dev_box:
       ansible_connection: local
       name: test-node
 
 tailscale:
   hosts:
-    localhost:
+    localhost_tailscale:
       ansible_connection: local
       name: test-node
