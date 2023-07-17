@@ -106,7 +106,7 @@ jobs:
         params:
           image: image/image.tar
 
-  - name: converge-build_node
+  - name: lint-and-test
     <<: *job-common
     plan:
       - in_parallel:
@@ -116,6 +116,27 @@ jobs:
           trigger: false
           passed:
             - build-ubuntu-22.04
+
+      - task: lint
+        tags:
+          - internal
+        image: ubuntu-22.04
+        file: homelab-ansible/ci/lint-and-test.yaml
+        input_mapping:
+          repo: homelab-ansible
+
+  - name: converge-build_node
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+          passed:
+            - lint-and-test
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - lint-and-test
         - get: nightly-trigger
           trigger: true
 
@@ -131,16 +152,18 @@ jobs:
           PLAYBOOK: build_node.yml
           VAULT_PASSWORD: ((vault-password))
 
-  - name: converge-dev-box
+  - name: converge-dev_box
     <<: *job-common
     plan:
       - in_parallel:
         - get: homelab-ansible
           trigger: true
+          passed:
+            - lint-and-test
         - get: ubuntu-22.04
           trigger: false
           passed:
-            - build-ubuntu-22.04
+            - lint-and-test
         - get: nightly-trigger
           trigger: true
 
@@ -162,10 +185,12 @@ jobs:
       - in_parallel:
         - get: homelab-ansible
           trigger: true
+          passed:
+            - lint-and-test
         - get: ubuntu-22.04
           trigger: false
           passed:
-            - build-ubuntu-22.04
+            - lint-and-test
         - get: nightly-trigger
           trigger: true
 
