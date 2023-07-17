@@ -11,10 +11,10 @@ echo "$CREATE_USER ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/$CREATE_USER"
 
 # from scratch
 echo "--- FIRST PASS ---"
-ansible-playbook -i inventory/test.yml --vault-password-file vaultpass playbooks/"$PLAYBOOK"
+ansible-playbook -i inventory/test.yml --vault-password-file vaultpass "$PLAYBOOK"
 
 # second pass to sanity check that we _appear_ idempotent
 echo "--- SECOND PASS ---"
-ansible-playbook -i inventory/test.yml --vault-password-file vaultpass playbooks/"$PLAYBOOK"
+ansible-playbook -i inventory/test.yml --vault-password-file vaultpass "$PLAYBOOK"
 
 rm vaultpass
