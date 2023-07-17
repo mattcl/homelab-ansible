@@ -5,4 +5,4 @@
     state: directory
     owner: matt
     group: matt
-    mode: "0777"
+    mode: "0775"

@@ -9,7 +9,7 @@
   ansible.builtin.file:
     dest: "/tmp/{{ item.key }}"
     state: directory
-    mode: "0777"
+    mode: "0775"
   when: "not check_bin.stat.exists"
 
 - name: "Download"
