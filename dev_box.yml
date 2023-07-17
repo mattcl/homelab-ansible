@@ -3,4 +3,6 @@
   hosts: dev_box
   become: true
   roles:
+    - common
+    - docker
     - dev_box
