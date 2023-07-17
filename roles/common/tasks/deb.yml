@@ -1,0 +1,16 @@
+---
+- name: Check if {{ item.key }} is installed
+  command: dpkg-query -W {{ item.key }}
+  register: "{{ item.key }}_check_deb"
+  failed_when: "{{ item.key }}_check_deb.rc > 1"
+  changed_when: "{{ item.key }}_check_deb.rc == 1"
+
+- name: Download {{ item.key }}
+  get_url:
+    url="{{ item.value.release }}"
+    dest="/tmp/{{ item.value.file }}"
+  when: "{{ item.key }}_check_deb.rc == 1"
+
+- name: Install {{ item.key }}
+  apt: deb="/tmp/{{ item.value.file }}"
+  when: "{{ item.key }}_check_deb.rc == 1"

@@ -2,11 +2,13 @@
 - name: Install common tools dependencies
   apt:
     pkg:
+      - bat
       - curl
       - exa
       - git
       - htop
       - lm-sensors
+      - fd-find
       - powertop
       - ripgrep
       - tmux
@@ -17,9 +19,10 @@
     state: latest
     update_cache: true
 
-- name: Dust
-  import_tasks:
-    file: dust.yml
+- name: Install deb releases
+  include_tasks:
+    file: deb.yml
+  loop: {{ common.deb_releases | dict2items }}
 
 - name: Rust
   import_tasks:

@@ -1,0 +1,6 @@
+---
+common:
+  deb_releases:
+    du-dust:
+      release: "https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb"
+      file: "du-dust_0.8.6_amd64.deb"
