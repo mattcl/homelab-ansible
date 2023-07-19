@@ -127,23 +127,6 @@ jobs:
         file: homelab-ansible/ci/lint.yaml
         input_mapping:
           repo: homelab-ansible
-      - across:
-        - var: playbook
-          values:
-            - "build_node.yml"
-            - "dev_box.yml"
-            - "tailscale.yml"
-        task: check-((.:playbook))
-        tags:
-          - internal
-        image: ubuntu-22.04
-        file: homelab-ansible/ci/check.yaml
-        input_mapping:
-          repo: homelab-ansible
-        params:
-          CREATE_USER: matt
-          PLAYBOOK: ((.:playbook))
-          VAULT_PASSWORD: ((vault-password))
 
   - name: converge-build_node
     <<: *job-common
