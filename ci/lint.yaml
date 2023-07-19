@@ -5,4 +5,4 @@ inputs:
 
 run:
   dir: repo
-  path: ci/lint-and-test.sh
+  path: ci/lint.sh

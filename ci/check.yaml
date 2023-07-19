@@ -1,0 +1,13 @@
+platform: linux
+
+inputs:
+  - name: repo
+
+params:
+  VAULT_PASSWORD:
+  CREATE_USER:
+  PLAYBOOK:
+
+run:
+  dir: repo
+  path: ci/check.sh
