@@ -1,6 +1,10 @@
 #!/bin/bash
 
-echo "$VAULT_PASSWORD" > vaultpass
+if [ -z ${LOCAL_TEST+x} ]; then
+    echo "$VAULT_PASSWORD" > .vaultpass
+else
+    echo "Local testing. Skipping creation of vault password file"
+fi
 
 set -ex
 
@@ -11,10 +15,12 @@ echo "$CREATE_USER ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/$CREATE_USER"
 
 # from scratch
 echo "--- FIRST PASS ---"
-ansible-playbook -i inventory/test.yml --vault-password-file vaultpass "$PLAYBOOK"
+ansible-playbook -i inventory/test.yml --vault-password-file .vaultpass "$PLAYBOOK"
 
 # second pass to sanity check that we _appear_ idempotent
 echo "--- SECOND PASS ---"
-ansible-playbook -i inventory/test.yml --vault-password-file vaultpass "$PLAYBOOK"
+ansible-playbook -i inventory/test.yml --vault-password-file .vaultpass "$PLAYBOOK"
 
-rm vaultpass
+if [ -z ${LOCAL_TEST+x} ]; then
+    rm .vaultpass
+fi

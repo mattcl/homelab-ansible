@@ -1,1 +1,29 @@
 ---
+ohmyzsh:
+  plugins:
+    fzf-marks:
+      repo_url: "https://github.com/urbainvaes/fzf-marks"
+      version: "HEAD"
+    vi-mode-custom:
+      repo_url: "https://github.com/mattcl/vi-mode-custom"
+      version: "HEAD"
+    zsh-256color:
+      repo_url: "https://github.com/chrissicool/zsh-256color"
+      version: "HEAD"
+    zsh-autosuggestions:
+      repo_url: "https://github.com/zsh-users/zsh-autosuggestions"
+      version: "HEAD"
+    zsh-completions:
+      repo_url: "https://github.com/zsh-users/zsh-completions"
+      version: "HEAD"
+    zsh-syntax-highlighting:
+      repo_url: "https://github.com/zsh-users/zsh-syntax-highlighting"
+      version: "HEAD"
+
+  themes:
+    powerlevel10k:
+      repo_url: "https://github.com/romkatv/powerlevel10k.git"
+      version: "HEAD"
+
+fzf:
+  version: 0.42.0

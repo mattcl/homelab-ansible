@@ -6,3 +6,9 @@
     owner: matt
     group: matt
     mode: "0775"
+
+- name: Install oh-my-zsh
+  ansible.builtin.import_tasks: ohmyzsh.yml
+
+- name: Install fzf
+  ansible.builtin.import_tasks: fzf.yml
