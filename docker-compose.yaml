@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  local-converge:
+    image: mattcl/ansible-ci:22.04
+    volumes:
+      - .:/playbooks:ro
+    working_dir: /playbooks
+    environment:
+      - CREATE_USER=matt
+      - LOCAL_TEST=1
+    entrypoint: /playbooks/ci/converge.sh

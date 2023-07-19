@@ -1,0 +1,35 @@
+---
+- name: Check for .oh-my-zsh
+  ansible.builtin.stat:
+    path: "/home/matt/.oh-my-zsh"
+  register: zsh_status
+
+- name: Download ohmyzsh install script
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh"
+    dest: "/tmp/install-ohmyzsh"
+    mode: "0755"
+  when: not zsh_status.stat.exists
+
+- name: Install ohmyzsh
+  ansible.builtin.command:
+    cmd: "/tmp/install-ohmyzsh --unattended --keep-zshrc"
+    creates: "/home/matt/.oh-my-zsh"
+  when: not zsh_status.stat.exists
+
+- name: Install ohmyzsh plugins
+  ansible.builtin.git:
+    repo: "{{ item.value.repo_url }}"
+    dest: "/home/matt/.oh-my-zsh/custom/plugins/{{ item.key }}"
+    version: "{{ item.value.version }}"
+  loop: "{{ ohmyzsh.plugins | dict2items }}"
+  when: not zsh_status.stat.exists
+
+- name: Install ohmyzsh themes
+  ansible.builtin.git:
+    repo: "{{ item.value.repo_url }}"
+    dest: "/home/matt/.oh-my-zsh/custom/themes/{{ item.key }}"
+    version: "{{ item.value.version }}"
+    depth: 1
+  loop: "{{ ohmyzsh.themes | dict2items }}"
+  when: not zsh_status.stat.exists
