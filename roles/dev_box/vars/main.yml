@@ -27,3 +27,13 @@ ohmyzsh:
 
 fzf:
   version: 0.42.0
+
+dotfiles:
+  repo: https://gitea.hl.ancalagon.black/matt/dotfiles.git
+
+nvim:
+  version: v0.9.1
+
+nvim_config:
+  repo_url: https://github.com/mattcl/nvim
+  version: "HEAD"

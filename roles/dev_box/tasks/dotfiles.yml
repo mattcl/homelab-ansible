@@ -1,0 +1,40 @@
+---
+- name: Check for chezmoi
+  ansible.builtin.stat:
+    path: "/home/matt/bin/chezmoi"
+  register: chezmoi_status
+
+- name: Download chezmoi installer
+  ansible.builtin.get_url:
+    url: "https://get.chezmoi.io/lb"
+    dest: "/tmp/install-chezmoi"
+    mode: '0755'
+  when: not chezmoi_status.stat.exists
+
+- name: Install chezmoi
+  ansible.builtin.command:
+    cmd: "/tmp/install-chezmoi -b /home/matt/bin"
+    creates: "/home/matt/bin/chezmoi"
+  when: not chezmoi_status.stat.exists
+
+# there's no great way to convey this to age, so we're just going to put the
+# decrypted key where we expect it to be
+- name: Add decrypted key
+  ansible.builtin.copy:
+    src: key.txt
+    dest: /home/matt/key.txt
+    mode: "0600"
+    owner: matt
+    group: matt
+    decrypt: true
+    force: false
+
+- name: Apply dotfiles
+  ansible.builtin.command:
+    cmd: >
+      "/home/matt/bin/chezmoi" init
+      --apply {{ dotfiles.repo }}
+    creates: "/home/matt/.local/share/chezmoi"
+  become: true
+  become_user: matt
+  when: not chezmoi_status.stat.exists

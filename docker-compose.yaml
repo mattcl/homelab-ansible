@@ -10,3 +10,19 @@ services:
       - CREATE_USER=matt
       - LOCAL_TEST=1
     entrypoint: /playbooks/ci/converge.sh
+
+  local-sandbox:
+    image: mattcl/ansible-ci:22.04
+    volumes:
+      - .:/playbooks:ro
+    working_dir: /playbooks
+    environment:
+      - CREATE_USER=matt
+      - LOCAL_TEST=1
+    entrypoint:
+      - /bin/bash
+      - "-c"
+      - "/playbooks/ci/converge.sh && /bin/bash"
+    # so the container doesn't exit until we want it to
+    tty: true
+    stdin_open: true

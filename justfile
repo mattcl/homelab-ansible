@@ -5,3 +5,7 @@ converge PLAYBOOK STAGE:
 # run a test for a particular playbook
 test PLAYBOOK:
     docker compose run --rm -e PLAYBOOK={{ PLAYBOOK }} local-converge
+
+# run a test for a particular playbook
+sandbox PLAYBOOK:
+    docker compose run --rm -e PLAYBOOK={{ PLAYBOOK }} local-sandbox

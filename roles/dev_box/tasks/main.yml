@@ -7,8 +7,22 @@
     group: matt
     mode: "0775"
 
+- name: Make home bin dir
+  ansible.builtin.file:
+    dest: /home/matt/.local/share
+    state: directory
+    owner: matt
+    group: matt
+    mode: "0775"
+
 - name: Install oh-my-zsh
   ansible.builtin.import_tasks: ohmyzsh.yml
 
 - name: Install fzf
   ansible.builtin.import_tasks: fzf.yml
+
+- name: Install dotfiles
+  ansible.builtin.import_tasks: dotfiles.yml
+
+- name: Install nvim
+  ansible.builtin.import_tasks: nvim.yml

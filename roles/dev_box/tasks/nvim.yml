@@ -1,0 +1,43 @@
+---
+- name: "Check nvim installed"
+  ansible.builtin.stat:
+    path: /usr/local/bin/nvim-{{ nvim.version }}
+  register: "check_nvim"
+  changed_when: "not check_bin.stat.exists"
+
+# I don't want to deal with FUSE (especially in a container), so we're going to
+# just grab the archive and unpack it (instead of using the .appimage).
+- name: "Download nvim"
+  ansible.builtin.get_url:
+    url: "https://github.com/neovim/neovim/releases/download/{{ nvim.version }}/nvim-linux64.tar.gz"
+    dest: "/tmp/nvim-linux64.tar.gz"
+    mode: "0644"
+  when: "not check_nvim.stat.exists"
+
+- name: "Extract nvim"
+  ansible.builtin.unarchive:
+    src: "/tmp/nvim-linux64.tar.gz"
+    dest: "/tmp"
+  when: "not check_nvim.stat.exists"
+
+- name: Install desired nvim
+  ansible.builtin.command:
+    cmd: "mv /tmp/nvim-linux64 /usr/local/bin/nvim-{{ nvim.version }}"
+    creates: "/usr/local/bin/nvim-{{ nvim.version }}"
+
+# This is going to have the effect of leaving old versions around, but will at
+# least allow for upgrading nvim on all machines in one pass. We _could_ maybe
+# remove existing directories matching a particular pattern first, I suppose.
+- name: Link nvim
+  ansible.builtin.file:
+    src: "/usr/local/bin/nvim-{{ nvim.version }}/bin/nvim"
+    dest: /usr/local/bin/nvim
+    owner: root
+    group: root
+    state: link
+
+- name: Install nvim configs
+  ansible.builtin.git:
+    repo: "{{ nvim_config.repo_url }}"
+    dest: "/home/matt/.config/nvim"
+    version: "{{ nvim_config.version }}"
