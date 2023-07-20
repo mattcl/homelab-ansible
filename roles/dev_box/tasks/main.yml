@@ -15,14 +15,17 @@
     group: matt
     mode: "0775"
 
-- name: Install oh-my-zsh
+- name: Run oh-my-zsh tasks
   ansible.builtin.import_tasks: ohmyzsh.yml
 
-- name: Install fzf
+- name: Run fzf tasks
   ansible.builtin.import_tasks: fzf.yml
 
-- name: Install dotfiles
+- name: Run dotfiles tasks
   ansible.builtin.import_tasks: dotfiles.yml
 
-- name: Install nvim
+- name: Run python tasks
+  ansible.builtin.import_tasks: python.yml
+
+- name: Run nvim tasks
   ansible.builtin.import_tasks: nvim.yml

@@ -28,12 +28,24 @@ ohmyzsh:
 fzf:
   version: 0.42.0
 
+pyenv:
+  repo_url: "https://github.com/pyenv/pyenv.git"
+  version: "HEAD"
+
+pyenv_virtualenv:
+  repo_url: "https://github.com/pyenv/pyenv-virtualenv.git"
+  version: "HEAD"
+
 dotfiles:
-  repo: https://gitea.hl.ancalagon.black/matt/dotfiles.git
+  repo:
+    https_url: "https://gitea.hl.ancalagon.black/matt/dotfiles.git"
+    ssh_url: "git@github.com:mattcl/dotfiles.git"
 
 nvim:
   version: v0.9.1
 
 nvim_config:
-  repo_url: https://github.com/mattcl/nvim
+  repo:
+    https_url: "https://github.com/mattcl/nvim.git"
+    ssh_url: "git@github.com:mattcl/nvim.git"
   version: "HEAD"

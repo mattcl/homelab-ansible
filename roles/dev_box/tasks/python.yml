@@ -1,0 +1,12 @@
+---
+- name: Install pyenv
+  ansible.builtin.git:
+    repo: "{{ pyenv.repo_url }}"
+    dest: "/home/matt/.pyenv"
+    version: "{{ pyenv.version }}"
+
+- name: Install pyenv virtualenv
+  ansible.builtin.git:
+    repo: "{{ pyenv_virtualenv.repo_url }}"
+    dest: "/home/matt/.pyenv/plugins/pyenv-virtualenv"
+    version: "{{ pyenv_virtualenv.version }}"

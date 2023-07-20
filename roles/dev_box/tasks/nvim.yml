@@ -3,7 +3,7 @@
   ansible.builtin.stat:
     path: /usr/local/bin/nvim-{{ nvim.version }}
   register: "check_nvim"
-  changed_when: "not check_bin.stat.exists"
+  changed_when: "not check_nvim.stat.exists"
 
 # I don't want to deal with FUSE (especially in a container), so we're going to
 # just grab the archive and unpack it (instead of using the .appimage).
@@ -12,18 +12,24 @@
     url: "https://github.com/neovim/neovim/releases/download/{{ nvim.version }}/nvim-linux64.tar.gz"
     dest: "/tmp/nvim-linux64.tar.gz"
     mode: "0644"
+  become: true
+  become_user: root
   when: "not check_nvim.stat.exists"
 
 - name: "Extract nvim"
   ansible.builtin.unarchive:
     src: "/tmp/nvim-linux64.tar.gz"
     dest: "/tmp"
+  become: true
+  become_user: root
   when: "not check_nvim.stat.exists"
 
 - name: Install desired nvim
   ansible.builtin.command:
     cmd: "mv /tmp/nvim-linux64 /usr/local/bin/nvim-{{ nvim.version }}"
     creates: "/usr/local/bin/nvim-{{ nvim.version }}"
+  become: true
+  become_user: root
 
 # This is going to have the effect of leaving old versions around, but will at
 # least allow for upgrading nvim on all machines in one pass. We _could_ maybe
@@ -35,9 +41,29 @@
     owner: root
     group: root
     state: link
+  become: true
+  become_user: root
+
+# because we're going to change the url, we don't want to builtin git module to
+# attempt to pull with the https url
+- name: "Check nvim config present"
+  ansible.builtin.stat:
+    path: /home/matt/.config/nvim
+  register: "check_nvim_config"
+  changed_when: "not check_nvim_config.stat.exists"
 
 - name: Install nvim configs
   ansible.builtin.git:
-    repo: "{{ nvim_config.repo_url }}"
+    repo: "{{ nvim_config.repo.https_url }}"
     dest: "/home/matt/.config/nvim"
     version: "{{ nvim_config.version }}"
+  when: not check_nvim_config.stat.exists
+
+- name: Change nvim config origin url
+  ansible.builtin.shell:
+    # ansible-lint thinks this can be accomplished with builtin module.
+    # It's wrong.
+    cmd: true && git remote set-url origin {{ nvim_config.repo.ssh_url }}
+    chdir: /home/matt/.config/nvim
+  changed_when: true
+  when: "not check_nvim_config.stat.exists"

@@ -17,8 +17,8 @@
     creates: "/home/matt/bin/chezmoi"
   when: not chezmoi_status.stat.exists
 
-# there's no great way to convey this to age, so we're just going to put the
-# decrypted key where we expect it to be
+# there's no great way to convey a password age as an argument, so we're just
+# going to put the decrypted key where we expect it to be
 - name: Add decrypted key
   ansible.builtin.copy:
     src: key.txt
@@ -33,8 +33,15 @@
   ansible.builtin.command:
     cmd: >
       "/home/matt/bin/chezmoi" init
-      --apply {{ dotfiles.repo }}
+      --apply {{ dotfiles.repo.https_url }}
     creates: "/home/matt/.local/share/chezmoi"
-  become: true
-  become_user: matt
+  when: not chezmoi_status.stat.exists
+
+- name: Change dotfile origin url
+  ansible.builtin.command:
+    # ansible-lint thinks this can be accomplished with builtin module.
+    # It's wrong.
+    cmd: true && git remote set-url origin {{ dotfiles.repo.ssh_url }}
+    chdir: /home/matt/.local/share/chezmoi
+  changed_when: true
   when: not chezmoi_status.stat.exists
