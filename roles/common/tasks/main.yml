@@ -1,22 +1,7 @@
 ---
-- name: Install common tools dependencies
+- name: Install apt packages
   ansible.builtin.apt:
-    pkg:
-      - bat
-      - curl
-      - exa
-      - git
-      - htop
-      - jq
-      - lm-sensors
-      - fd-find
-      - powertop
-      - ripgrep
-      - tmux
-      - unzip
-      - vim
-      - wget
-      - zsh
+    pkg: "{{ common_internal.apt_packages | union(common.apt_packages | default([])) }}"
     state: present
     update_cache: true
 

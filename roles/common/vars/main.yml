@@ -1,5 +1,22 @@
 ---
 common_internal:
+  apt_packages:
+    - bat
+    - curl
+    - exa
+    - git
+    - htop
+    - jq
+    - lm-sensors
+    - fd-find
+    - powertop
+    - ripgrep
+    - tmux
+    - unzip
+    - vim
+    - wget
+    - zsh
+
   deb_releases:
     dust:
       name: "du-dust"

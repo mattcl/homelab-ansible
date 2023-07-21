@@ -1,4 +1,10 @@
 ---
+# we _could_ install python with asdf, but I think I'm just too used to the
+# pyenv/pyenv-virtualenv interface to switch just yet.
+- name: Set pyenv_bin fact
+  ansible.builtin.set_fact:
+    pyenv_bin: "/home/matt/.pyenv/bin/pyenv"
+
 - name: Install pyenv
   ansible.builtin.git:
     repo: "{{ pyenv.repo_url }}"
@@ -10,3 +16,25 @@
     repo: "{{ pyenv_virtualenv.repo_url }}"
     dest: "/home/matt/.pyenv/plugins/pyenv-virtualenv"
     version: "{{ pyenv_virtualenv.version }}"
+
+- name: Install python versions
+  ansible.builtin.shell: "{{ pyenv_bin }} install {{ item }} && true"
+  args:
+    creates: "/home/matt/.pyenv/versions/{{ item }}/bin/python"
+  with_items: "{{ python_versions }}"
+
+- name: Check current global version
+  ansible.builtin.shell: "true && {{ pyenv_bin }} global"
+  register: pyenv_global_version
+  changed_when: false
+
+- name: Extract global version
+  ansible.builtin.set_fact:
+    pyenv_global_active: "{{ pyenv_global_version.stdout_lines | join(' ') | trim() }}"
+
+- name: Set pyenv global version
+  ansible.builtin.shell: >-
+    {{ pyenv_bin }} global {{ pyenv_global }} &&
+    {{ pyenv_bin }} rehash
+  when: "pyenv_global is defined and pyenv_global_active != pyenv_global"
+  changed_when: true

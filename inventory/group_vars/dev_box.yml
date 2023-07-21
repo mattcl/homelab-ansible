@@ -1,5 +1,23 @@
 ---
 common:
+  apt_packages:
+    - build-essential
+    - libbz2-dev
+    - libffi-dev
+    - liblzma-dev
+    - libncursesw5-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - libssl-dev
+    - libxml2-dev
+    - libxmlsec1-dev
+    - python3
+    - python3-pip
+    - shellcheck
+    - tk-dev
+    - xz-utils
+    - zlib1g-dev
+
   deb_releases:
     cargo_watch:
       name: "cargo-watch"
@@ -11,6 +29,11 @@ common:
       release: "https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_amd64.deb"
       file: "git-delta_0.16.5_amd64.deb"
 
+    hyperfine:
+      name: "hyperfine"
+      release: "https://github.com/sharkdp/hyperfine/releases/download/v1.17.0/hyperfine-musl_1.17.0_amd64.deb"
+      file: "hyperfine-musl_1.17.0_amd64.deb"
+
   tar_releases:
     just:
       name: "just"
@@ -18,8 +41,26 @@ common:
       file: "just-1.14.0-x86_64-unknown-linux-musl.tar.gz"
       target: "just"
 
+    lazydocker:
+      name: "lazydocker"
+      release: "https://github.com/jesseduffield/lazydocker/releases/download/v0.20.0/lazydocker_0.20.0_Linux_x86.tar.gz"
+      file: "lazydocker_0.20.0_Linux_x86.tar.gz"
+      target: "lazydocker"
+
     navi:
       name: "navi"
       release: "https://github.com/denisidoro/navi/releases/download/v2.22.1/navi-v2.22.1-x86_64-unknown-linux-musl.tar.gz"
       file: "navi-v2.22.1-x86_64-unknown-linux-musl.tar.gz"
       target: "navi"
+
+    tokei:
+      name: "tokei"
+      release: "https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-musl.tar.gz"
+      file: "tokei-x86_64-unknown-linux-musl.tar.gz"
+      target: "tokei"
+
+python_versions:
+  - "3.11.4"
+  - "3.10.11"
+
+pyenv_global: "3.10.11"

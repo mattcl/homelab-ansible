@@ -27,5 +27,8 @@
 - name: Run python tasks
   ansible.builtin.import_tasks: python.yml
 
+- name: Run asdf tasks
+  ansible.builtin.import_tasks: asdf.yml
+
 - name: Run nvim tasks
   ansible.builtin.import_tasks: nvim.yml
