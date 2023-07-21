@@ -59,11 +59,42 @@
     version: "{{ nvim_config.version }}"
   when: not check_nvim_config.stat.exists
 
-- name: Change nvim config origin url
+- name: Change nvim config origin url  # noqa: command-instead-of-module command-instead-of-shell
   ansible.builtin.shell:
-    # ansible-lint thinks this can be accomplished with builtin module.
-    # It's wrong.
-    cmd: true && git remote set-url origin {{ nvim_config.repo.ssh_url }}
+    cmd: git remote set-url origin {{ nvim_config.repo.ssh_url }}
     chdir: /home/matt/.config/nvim
   changed_when: true
   when: "not check_nvim_config.stat.exists"
+
+- name: Make plugged dir
+  ansible.builtin.file:
+    dest: /home/matt/.local/share/nvim/site/autoload
+    state: directory
+    owner: matt
+    group: matt
+    mode: "0775"
+
+- name: "Download vim-plug"
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+    dest: "/home/matt/.local/share/nvim/site/autoload/plug.vim"
+    mode: "0644"
+
+- name: "Check neovim venv present"
+  ansible.builtin.stat:
+    path: /home/matt/.pyenv/versions/{{ pyenv_global_active }}/envs/neovim
+  register: "check_neovim_venv"
+  changed_when: "not check_neovim_venv.stat.exists"
+
+- name: "Create neovim venv"
+  ansible.builtin.shell: >-
+    {{ pyenv_bin }} virtualenv neovim &&
+    {{ pyenv_bin }} rehash
+  when: "not check_neovim_venv.stat.exists"
+  changed_when: true
+
+- name: "Install neovim python package"  # noqa: command-instead-of-shell
+  ansible.builtin.shell: >-
+    /home/matt/.pyenv/versions/{{ pyenv_global_active }}/envs/neovim/bin/pip install pynvim
+  when: "not check_neovim_venv.stat.exists"
+  changed_when: true

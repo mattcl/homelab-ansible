@@ -63,4 +63,16 @@ python_versions:
   - "3.11.4"
   - "3.10.11"
 
+# if this gets changed, it'll require updating the zshenv for the nvim venv as
+# well
 pyenv_global: "3.10.11"
+
+# we have to indicate the created bin, as not all packages map directy to bin
+# name(s)
+pipx_packages:
+  black:
+    bin: black
+  cookiecutter:
+    bin: cookiecutter
+  poetry:
+    bin: poetry

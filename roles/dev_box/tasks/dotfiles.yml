@@ -38,10 +38,8 @@
   when: not chezmoi_status.stat.exists
 
 - name: Change dotfile origin url
-  ansible.builtin.command:
-    # ansible-lint thinks this can be accomplished with builtin module.
-    # It's wrong.
-    cmd: true && git remote set-url origin {{ dotfiles.repo.ssh_url }}
+  ansible.builtin.command:  # noqa: command-instead-of-module
+    cmd: git remote set-url origin {{ dotfiles.repo.ssh_url }}
     chdir: /home/matt/.local/share/chezmoi
   changed_when: true
   when: not chezmoi_status.stat.exists
