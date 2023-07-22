@@ -74,6 +74,12 @@ common:
       file: "navi-v2.22.1-x86_64-unknown-linux-musl.tar.gz"
       target: "navi"
 
+    see:
+      name: "see"
+      release: "https://github.com/wyhaya/see/releases/download/v0.0.8/see-x86_64-unknown-linux-musl.zip"
+      file: "see-x86_64-unknown-linux-musl.zip"
+      target: "see"
+
     tokei:
       name: "tokei"
       release: "https://github.com/XAMPPRocky/tokei/releases/download/v12.1.2/tokei-x86_64-unknown-linux-musl.tar.gz"
@@ -96,3 +102,5 @@ pipx_packages:
     bin: cookiecutter
   poetry:
     bin: poetry
+  pre-commit:
+    bin: pre-commit
