@@ -36,3 +36,6 @@
 
 - name: Run nvim tasks
   ansible.builtin.import_tasks: nvim.yml
+
+- name: Run kubernetes tasks
+  ansible.builtin.import_tasks: kubernetes.yml

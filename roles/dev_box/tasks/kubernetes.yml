@@ -1,0 +1,11 @@
+---
+# for now, the other tools like k9s and kubeseal are installed by adding to the
+# common package installs
+- name: "Download kubectl"
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/{{ kubectl.version }}/bin/linux/amd64/kubectl"
+    dest: "/usr/local/bin/kubectl"
+    mode: "0755"
+  become: true
+  become_user: root
+  when: "not check_bin.stat.exists"
