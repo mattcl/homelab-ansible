@@ -98,3 +98,9 @@
     /home/matt/.pyenv/versions/{{ pyenv_global_active }}/envs/neovim/bin/pip install pynvim
   when: "not check_neovim_venv.stat.exists"
   changed_when: true
+
+- name: "Install vim plugins"  # noqa: command-instead-of-shell
+  ansible.builtin.shell: >-
+    nvim -es -u /home/matt/.config/nvim/lua/plugin_init.lua -i NONE -c "PlugInstall" -c "qa"
+  changed_when: true
+  when: not check_nvim_config.stat.exists
