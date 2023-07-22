@@ -1,4 +1,8 @@
 ---
+- name: Set dev user home
+  ansible.builtin.set_fact:
+    dev_home: "/home/{{ dev_user }}"
+
 - name: Install apt packages
   ansible.builtin.apt:
     pkg: "{{ common_internal.apt_packages | union(common.apt_packages | default([])) }}"

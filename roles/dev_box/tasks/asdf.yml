@@ -1,7 +1,7 @@
 ---
 - name: Set asdf_path fact
   ansible.builtin.set_fact:
-    asdf_path: "/home/matt/.asdf"
+    asdf_path: "{{ dev_home }}/.asdf"
 
 - name: Install asdf
   ansible.builtin.git:
@@ -15,7 +15,7 @@
 
 - name: Parse plugins
   ansible.builtin.command:
-    cmd: "cut --delimiter=' ' --fields=1 /home/matt/.tool-versions"
+    cmd: "cut --delimiter=' ' --fields=1 {{ dev_home }}/.tool-versions"
   register: plugins
   changed_when: false
 
@@ -30,5 +30,5 @@
     cmd: "{{ asdf_bin }} install {{ item }}"
     creates: "{{ asdf_path }}/installs/{{ item }}"
   environment:
-    PATH: "{{ ansible_env.PATH }}:/home/matt/.asdf/bin"
+    PATH: "{{ ansible_env.PATH }}:{{ dev_home }}/.asdf/bin"
   loop: "{{ plugins.stdout_lines }}"

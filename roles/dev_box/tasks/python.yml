@@ -3,24 +3,24 @@
 # pyenv/pyenv-virtualenv interface to switch just yet.
 - name: Set pyenv_bin fact
   ansible.builtin.set_fact:
-    pyenv_bin: "/home/matt/.pyenv/bin/pyenv"
+    pyenv_bin: "{{ dev_home }}/.pyenv/bin/pyenv"
 
 - name: Install pyenv
   ansible.builtin.git:
     repo: "{{ pyenv.repo_url }}"
-    dest: "/home/matt/.pyenv"
+    dest: "{{ dev_home }}/.pyenv"
     version: "{{ pyenv.version }}"
 
 - name: Install pyenv virtualenv
   ansible.builtin.git:
     repo: "{{ pyenv_virtualenv.repo_url }}"
-    dest: "/home/matt/.pyenv/plugins/pyenv-virtualenv"
+    dest: "{{ dev_home }}/.pyenv/plugins/pyenv-virtualenv"
     version: "{{ pyenv_virtualenv.version }}"
 
 - name: Install python versions  # noqa: command-instead-of-shell
   ansible.builtin.shell: "{{ pyenv_bin }} install {{ item }}"
   args:
-    creates: "/home/matt/.pyenv/versions/{{ item }}/bin/python"
+    creates: "{{ dev_home }}/.pyenv/versions/{{ item }}/bin/python"
   with_items: "{{ python_versions }}"
 
 - name: Check current global version  # noqa: command-instead-of-shell
@@ -50,14 +50,14 @@
 
 - name: Install pipx  # noqa: command-instead-of-shell
   ansible.builtin.shell: >-
-    /home/matt/.pyenv/versions/{{ pyenv_global }}/bin/pip install pipx &&
+    {{ dev_home }}/.pyenv/versions/{{ pyenv_global }}/bin/pip install pipx &&
     {{ pyenv_bin }} rehash
   args:
-    creates: /home/matt/.pyenv/versions/{{ pyenv_global }}/bin/pipx
+    creates: "{{ dev_home }}/.pyenv/versions/{{ pyenv_global }}/bin/pipx"
 
 - name: Install pipx  # noqa: command-instead-of-shell
   ansible.builtin.shell: >-
-    /home/matt/.pyenv/versions/{{ pyenv_global }}/bin/pipx install {{ item.key }}
+    {{ dev_home }}/.pyenv/versions/{{ pyenv_global }}/bin/pipx install {{ item.key }}
   args:
-    creates: /home/matt/.local/bin/{{ item.value.bin }}
+    creates: "{{ dev_home }}/.local/bin/{{ item.value.bin }}"
   with_items: "{{ pipx_packages | dict2items }}"

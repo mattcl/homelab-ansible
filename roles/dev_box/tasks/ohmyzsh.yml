@@ -1,7 +1,7 @@
 ---
 - name: Check for .oh-my-zsh
   ansible.builtin.stat:
-    path: "/home/matt/.oh-my-zsh"
+    path: "{{ dev_home }}/.oh-my-zsh"
   register: zsh_status
 
 - name: Download ohmyzsh install script
@@ -14,13 +14,13 @@
 - name: Install ohmyzsh
   ansible.builtin.command:
     cmd: "/tmp/install-ohmyzsh --unattended --keep-zshrc"
-    creates: "/home/matt/.oh-my-zsh"
+    creates: "{{ dev_home }}/.oh-my-zsh"
   when: not zsh_status.stat.exists
 
 - name: Install ohmyzsh plugins
   ansible.builtin.git:
     repo: "{{ item.value.repo_url }}"
-    dest: "/home/matt/.oh-my-zsh/custom/plugins/{{ item.key }}"
+    dest: "{{ dev_home }}/.oh-my-zsh/custom/plugins/{{ item.key }}"
     version: "{{ item.value.version }}"
   loop: "{{ ohmyzsh.plugins | dict2items }}"
   when: not zsh_status.stat.exists
@@ -28,7 +28,7 @@
 - name: Install ohmyzsh themes
   ansible.builtin.git:
     repo: "{{ item.value.repo_url }}"
-    dest: "/home/matt/.oh-my-zsh/custom/themes/{{ item.key }}"
+    dest: "{{ dev_home }}/.oh-my-zsh/custom/themes/{{ item.key }}"
     version: "{{ item.value.version }}"
     depth: 1
   loop: "{{ ohmyzsh.themes | dict2items }}"
@@ -36,7 +36,7 @@
 
 - name: Set user shell to zsh
   ansible.builtin.command:
-    cmd: "chsh -s /usr/bin/zsh matt"
+    cmd: "chsh -s /usr/bin/zsh {{ dev_user }}"
   changed_when: true
   become: true
   become_user: root

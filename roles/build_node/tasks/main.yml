@@ -1,4 +1,8 @@
 ---
+- name: Set dev user home
+  ansible.builtin.set_fact:
+    dev_home: "/home/{{ dev_user }}"
+
 - name: Create key dir
   ansible.builtin.file:
     dest: /opt/concourse/keys
@@ -23,17 +27,17 @@
 
 - name: Create service dir
   ansible.builtin.file:
-    dest: /home/matt/services/concourse-worker
+    dest: "{{ dev_home }}/services/concourse-worker"
     state: directory
-    owner: matt
-    group: matt
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
     mode: "0775"
 
 - name: Create compose file
   ansible.builtin.template:
     src: docker-compose.yaml
-    dest: /home/matt/services/concourse-worker/docker-compose.yaml
-    owner: matt
-    group: matt
+    dest: "{{ dev_home }}/services/concourse-worker/docker-compose.yaml"
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
     mode: "0644"
     force: false

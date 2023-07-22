@@ -7,4 +7,4 @@
     - role: docker
     - role: dev_box
       become: true
-      become_user: matt
+      become_user: "{{ dev_user }}"

@@ -1,7 +1,7 @@
 ---
 - name: Check for chezmoi
   ansible.builtin.stat:
-    path: "/home/matt/bin/chezmoi"
+    path: "{{ dev_home }}/bin/chezmoi"
   register: chezmoi_status
 
 - name: Download chezmoi installer
@@ -13,8 +13,8 @@
 
 - name: Install chezmoi
   ansible.builtin.command:
-    cmd: "/tmp/install-chezmoi -b /home/matt/bin"
-    creates: "/home/matt/bin/chezmoi"
+    cmd: "/tmp/install-chezmoi -b {{ dev_home }}/bin"
+    creates: "{{ dev_home }}/bin/chezmoi"
   when: not chezmoi_status.stat.exists
 
 # there's no great way to convey a password age as an argument, so we're just
@@ -22,24 +22,24 @@
 - name: Add decrypted key
   ansible.builtin.copy:
     src: key.txt
-    dest: /home/matt/key.txt
+    dest: "{{ dev_home }}/key.txt"
     mode: "0600"
-    owner: matt
-    group: matt
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
     decrypt: true
     force: false
 
 - name: Apply dotfiles
   ansible.builtin.command:
     cmd: >
-      "/home/matt/bin/chezmoi" init
+      "{{ dev_home }}/bin/chezmoi" init
       --apply {{ dotfiles.repo.https_url }}
-    creates: "/home/matt/.local/share/chezmoi"
+    creates: "{{ dev_home }}/.local/share/chezmoi"
   when: not chezmoi_status.stat.exists
 
 - name: Change dotfile origin url
   ansible.builtin.command:  # noqa: command-instead-of-module
     cmd: git remote set-url origin {{ dotfiles.repo.ssh_url }}
-    chdir: /home/matt/.local/share/chezmoi
+    chdir: "{{ dev_home }}/.local/share/chezmoi"
   changed_when: true
   when: not chezmoi_status.stat.exists

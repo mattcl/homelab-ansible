@@ -1,18 +1,22 @@
 ---
+- name: Set dev user home
+  ansible.builtin.set_fact:
+    dev_home: "/home/{{ dev_user }}"
+
 - name: Make home bin dir
   ansible.builtin.file:
-    dest: /home/matt/bin
+    dest: "{{ dev_home }}/bin"
     state: directory
-    owner: matt
-    group: matt
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
     mode: "0775"
 
 - name: Make home bin dir
   ansible.builtin.file:
-    dest: /home/matt/.local/share
+    dest: "{{ dev_home }}/.local/share"
     state: directory
-    owner: matt
-    group: matt
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
     mode: "0775"
 
 - name: Run oh-my-zsh tasks

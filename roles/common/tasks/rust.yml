@@ -1,7 +1,7 @@
 ---
 - name: Check for presence of rustup executable
   ansible.builtin.stat:
-    path: "/home/matt/.cargo/bin/rustup"
+    path: "{{ dev_home }}/.cargo/bin/rustup"
   register: rustup_exe_status
 
 - name: Download rust Installer
@@ -17,10 +17,10 @@
 - name: Install rust/cargo  # noqa: command-instead-of-shell
   ansible.builtin.shell: /tmp/sh.rustup.rs -y
   args:
-    chdir: /home/matt
-    creates: /home/matt/.cargo/bin/rustup
+    chdir: "{{ dev_home }}"
+    creates: "{{ dev_home }}/.cargo/bin/rustup"
   when: not rustup_exe_status.stat.exists
   become: true
-  become_user: matt
+  become_user: "{{ dev_user }}"
   tags:
     - rust

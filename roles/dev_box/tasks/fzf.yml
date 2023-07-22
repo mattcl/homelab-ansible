@@ -2,11 +2,11 @@
 - name: Checkout fzf
   ansible.builtin.git:
     repo: "https://github.com/junegunn/fzf.git"
-    dest: "/home/matt/.fzf"
+    dest: "{{ dev_home }}/.fzf"
     version: "{{ fzf.version }}"
     depth: 1
 
 - name: Install fzf
   ansible.builtin.command:
-    cmd: "/home/matt/.fzf/install"
-    creates: "/home/matt/.fzf/bin/fzf"
+    cmd: "{{ dev_home }}/.fzf/install"
+    creates: "{{ dev_home }}/.fzf/bin/fzf"
