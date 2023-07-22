@@ -56,6 +56,12 @@ common:
       file: "kubeseal-0.23.0-linux-amd64.tar.gz"
       target: "kubeseal"
 
+    kustomize:
+      name: "kustomize"
+      release: "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv5.1.0/kustomize_v5.1.0_linux_amd64.tar.gz"
+      file: "kustomize_v5.1.0_linux_amd64.tar.gz"
+      target: "kustomize"
+
     lazydocker:
       name: "lazydocker"
       release: "https://github.com/jesseduffield/lazydocker/releases/download/v0.20.0/lazydocker_0.20.0_Linux_x86.tar.gz"
@@ -75,7 +81,6 @@ common:
       target: "tokei"
 
 python_versions:
-  - "3.11.4"
   - "3.10.11"
 
 # if this gets changed, it'll require updating the zshenv for the nvim venv as
