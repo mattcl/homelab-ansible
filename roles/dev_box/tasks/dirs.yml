@@ -1,0 +1,32 @@
+- name: Make home bin dir
+  ansible.builtin.file:
+    dest: "{{ dev_home }}/bin"
+    state: directory
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+    mode: "0775"
+
+- name: Make home local share
+  ansible.builtin.file:
+    dest: "{{ dev_home }}/.local/share"
+    state: directory
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+    mode: "0775"
+
+- name: Make code dirs
+  ansible.builtin.file:
+    # we're going to rely on the recursive create
+    dest: "{{ dev_home }}/code/third-party"
+    state: directory
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+    mode: "0775"
+
+- name: Make scratch
+  ansible.builtin.file:
+    dest: "{{ dev_home }}/scratch"
+    state: directory
+    owner: "{{ dev_user }}"
+    group: "{{ dev_user }}"
+    mode: "0775"
