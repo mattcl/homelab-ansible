@@ -1,5 +1,5 @@
 ---
-- name: Configure build nodes
+- name: Configure tailscale nodes
   hosts: tailscale
   become: true
   roles:
