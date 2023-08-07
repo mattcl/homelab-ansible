@@ -173,6 +173,7 @@ jobs:
       - task: converge
         tags:
           - internal
+          - ser6
         image: ubuntu-22.04
         file: homelab-ansible/ci/converge.yaml
         input_mapping:
@@ -180,6 +181,33 @@ jobs:
         params:
           CREATE_USER: matt
           PLAYBOOK: dev_box.yml
+          VAULT_PASSWORD: ((vault-password))
+
+  - name: converge-monitoring
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+          passed:
+            - lint-and-test
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - lint-and-test
+        - get: nightly-trigger
+          trigger: true
+
+      - task: converge
+        tags:
+          - internal
+        image: ubuntu-22.04
+        file: homelab-ansible/ci/converge.yaml
+        input_mapping:
+          repo: homelab-ansible
+        params:
+          CREATE_USER: matt
+          PLAYBOOK: monitoring.yml
           VAULT_PASSWORD: ((vault-password))
 
   - name: converge-tailscale
