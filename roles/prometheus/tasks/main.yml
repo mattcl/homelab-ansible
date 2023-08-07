@@ -1,0 +1,8 @@
+---
+- name: Configure prometheus
+  ansible.builtin.include_tasks:
+    file: configure_prometheus.yml
+
+- name: Configure grafana
+  ansible.builtin.include_tasks:
+    file: configure_grafana.yml

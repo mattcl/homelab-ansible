@@ -1,4 +1,8 @@
 ---
+- name: Set dev user home
+  ansible.builtin.set_fact:
+    dev_home: "/home/{{ dev_user }}"
+
 - name: Check for presence of rustup executable
   ansible.builtin.stat:
     path: "{{ dev_home }}/.cargo/bin/rustup"

@@ -1,0 +1,31 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+
+- name: Add grafana key
+  ansible.builtin.apt_key:
+    url: https://apt.grafana.com/gpg.key
+    state: present
+
+- name: Add grafana repository
+  ansible.builtin.apt_repository:
+    repo: deb https://apt.grafana.com stable main
+    state: present
+
+- name: Install grafana
+  ansible.builtin.apt:
+    pkg:
+      - grafana
+    state: present
+    update_cache: true
+
+- name: Ensure grafana server service is enabled and started
+  ansible.builtin.service:
+    enabled: true
+    name: "grafana-server"
+    state: "started"
+  when: start_services|default(false)|bool

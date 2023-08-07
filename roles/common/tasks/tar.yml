@@ -23,6 +23,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/{{ item.key }}/{{ item.value.file }}"
     dest: "/tmp/{{ item.key }}"
+    remote_src: true
   when: "not check_bin.stat.exists"
 
 - name: Install to /usr/local/bin/

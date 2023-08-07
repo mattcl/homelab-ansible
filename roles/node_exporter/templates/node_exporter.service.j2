@@ -1,0 +1,14 @@
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+ExecStart=/usr/local/bin/node_exporter \
+          --collector.netdev.device-exclude=^(veth.*|docker.*|br.*)$ \
+          --collector.netclass.ignored-devices=^(veth.*|docker.*|br.*)$ \
+          --collector.filesystem.mount-points-exclude=^/(dev|proc|sys|media/.+|run/k3s/containerd.+|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+
+[Install]
+WantedBy=default.target

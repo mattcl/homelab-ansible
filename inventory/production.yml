@@ -2,16 +2,31 @@
 build_node:
   hosts:
     dinyol-hei.home:
+      start_services: true
       worker_name: dinyol-hei
       worker_tags: "internal,packager,ser6,7735HS"
     ethics-gradient.home:
+      start_services: true
       worker_name: ethics-gradient
       worker_tags: "internal,packager,ser6,7735HS"
     little-rascal.home:
+      start_services: true
       worker_name: little-rascal
       worker_tags: "internal,packager,eq12,N305"
+
+monitoring:
+  hosts:
+    192.168.20.188:
+      start_services: true
+      name: grey-area
+
+pihole:
+  hosts:
+    sursamen.home:
+      start_services: true
 
 tailscale:
   hosts:
     grey-area.home:
+      start_services: true
       name: grey-area

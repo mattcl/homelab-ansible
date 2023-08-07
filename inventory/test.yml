@@ -1,6 +1,7 @@
 build_node:
   hosts:
     localhost_build_node:
+      start_services: false
       ansible_connection: local
       worker_name: test-worker
       worker_tags: "testonly"
@@ -8,11 +9,20 @@ build_node:
 dev_box:
   hosts:
     localhost_dev_box:
+      start_services: false
+      ansible_connection: local
+      name: test-node
+
+monitoring:
+  hosts:
+    localhost_monitoring:
+      start_services: false
       ansible_connection: local
       name: test-node
 
 tailscale:
   hosts:
     localhost_tailscale:
+      start_services: false
       ansible_connection: local
       name: test-node

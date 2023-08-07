@@ -1,0 +1,99 @@
+---
+- name: Create prometheus group
+  ansible.builtin.group:
+    name: prometheus
+    system: true
+    state: present
+
+- name: Create prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    group: prometheus
+    system: true
+    state: present
+
+- name: Create prometheus etc dir owned by root
+  ansible.builtin.file:
+    path: "/etc/prometheus"
+    state: directory
+    owner: root
+    mode: '0755'
+
+- name: Create prometheus dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: prometheus
+    group: prometheus
+    mode: '0755'
+  with_items: "{{ prometheus_dirs }}"
+
+- name: "Check if prometheus installed"
+  ansible.builtin.stat:
+    path: /usr/local/bin/prometheus
+  register: "prometheus_check_bin"
+  changed_when: "not prometheus_check_bin.stat.exists"
+
+- name: "Make tmp if it doesn't exist"
+  ansible.builtin.file:
+    dest: "/tmp/prometheus"
+    state: directory
+    mode: "0755"
+  when: "not prometheus_check_bin.stat.exists"
+
+- name: "Download prometheus"
+  ansible.builtin.get_url:
+    url: "{{ prometheus_release }}"
+    dest: "/tmp/prometheus/{{ prometheus_archive }}"
+    mode: "0644"
+  when: "not prometheus_check_bin.stat.exists"
+
+- name: "Extract prometheus"
+  ansible.builtin.unarchive:
+    src: "/tmp/prometheus/{{ prometheus_archive }}"
+    dest: "/tmp/prometheus"
+    remote_src: true
+  when: "not prometheus_check_bin.stat.exists"
+
+- name: Install prometheus
+  ansible.builtin.shell: "cd prometheus*/ && chmod +x prometheus && mv prometheus /usr/local/bin/prometheus"
+  args:
+    chdir: "/tmp/prometheus"
+    creates: /usr/local/bin/prometheus
+  when: "not prometheus_check_bin.stat.exists"
+
+- name: Install promtool
+  ansible.builtin.shell: "cd prometheus*/ && chmod +x promtool && mv promtool /usr/local/bin/promtool"
+  args:
+    chdir: "/tmp/prometheus"
+    creates: /usr/local/bin/promtool
+  when: "not prometheus_check_bin.stat.exists"
+
+- name: Write prometheus configuration
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    mode: "0644"
+
+- name: Write prometheus nodes json
+  ansible.builtin.template:
+    src: nodes.json.j2
+    dest: /etc/prometheus/nodes.json
+    owner: prometheus
+    group: prometheus
+    mode: "0644"
+
+- name: Define prometheus service
+  ansible.builtin.template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    mode: "0644"
+
+- name: Ensure prometheus service is enabled and started
+  ansible.builtin.service:
+    enabled: true
+    name: "prometheus"
+    state: "started"
+  when: start_services|default(false)|bool

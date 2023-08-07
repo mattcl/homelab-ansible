@@ -1,0 +1,71 @@
+---
+- name: Create prometheus group
+  ansible.builtin.group:
+    name: prometheus
+    system: true
+    state: present
+
+- name: Create prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    group: prometheus
+    system: true
+    state: present
+
+- name: "Check if node_exporter installed"
+  ansible.builtin.stat:
+    path: /usr/local/bin/node_exporter
+  register: "node_exporter_check_bin"
+  changed_when: "not node_exporter_check_bin.stat.exists"
+
+- name: "Make tmp if it doesn't exist"
+  ansible.builtin.file:
+    dest: "/tmp/node_exporter"
+    state: directory
+    mode: "0755"
+  when: "not node_exporter_check_bin.stat.exists"
+
+- name: "Download node_exporter"
+  ansible.builtin.get_url:
+    url: "{{ node_exporter_release }}"
+    dest: "/tmp/node_exporter/{{ node_exporter_archive }}"
+    mode: "0644"
+  when: "not node_exporter_check_bin.stat.exists"
+
+- name: "Extract node_exporter"
+  ansible.builtin.unarchive:
+    src: "/tmp/node_exporter/{{ node_exporter_archive }}"
+    dest: "/tmp/node_exporter"
+    remote_src: true
+  when: "not node_exporter_check_bin.stat.exists"
+
+- name: Install node_exporter
+  ansible.builtin.shell: "cd node_exporter*/ && chmod +x node_exporter && mv node_exporter /usr/local/bin/node_exporter"
+  args:
+    chdir: "/tmp/node_exporter"
+    creates: /usr/local/bin/node_exporter
+  when: "not node_exporter_check_bin.stat.exists"
+
+- name: Define node_exporter service
+  ansible.builtin.template:
+    src: node_exporter.service.j2
+    dest: /etc/systemd/system/node_exporter.service
+    mode: "0644"
+  register: service_conf
+
+- name: Force systemd to reread configs (for restarting)
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Ensure node_exporter service is enabled and started
+  ansible.builtin.service:
+    enabled: true
+    name: "node_exporter"
+    state: "started"
+  when: start_services|default(false)|bool
+
+- name: Restart node_exporter on service change
+  ansible.builtin.service:
+    name: "node_exporter"
+    state: "restarted"
+  when: start_services|default(false)|bool and service_conf.changed

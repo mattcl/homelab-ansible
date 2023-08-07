@@ -1,0 +1,11 @@
+prometheus_dirs:
+  - /var/lib/prometheus
+  - /etc/prometheus/rules
+  - /etc/prometheus/rules.d
+  - /etc/prometheus/files_sd
+
+prometheus_release: "https://github.com/prometheus/prometheus/releases/download/v2.46.0/prometheus-2.46.0.linux-amd64.tar.gz"
+prometheus_archive: "prometheus-2.46.0.linux-amd64.tar.gz"
+
+prometheus_nodes:
+  - "localhost:9100"

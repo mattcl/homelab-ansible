@@ -1,2 +1,3 @@
 ci/secret.yaml
+packer/variables.pkrvars.hcl
 .vaultpass

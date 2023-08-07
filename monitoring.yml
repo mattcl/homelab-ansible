@@ -1,0 +1,8 @@
+---
+- name: Configure Prometheus and Grafana
+  hosts: monitoring
+  become: true
+  roles:
+    - role: common
+    - role: node_exporter
+    - role: prometheus

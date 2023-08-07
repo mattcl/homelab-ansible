@@ -4,6 +4,7 @@
   become: true
   roles:
     - role: common
+    - role: rust
     - role: docker
     - role: dev_box
       become: true
