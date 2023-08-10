@@ -182,6 +182,9 @@ jobs:
           CREATE_USER: matt
           PLAYBOOK: dev_box.yml
           VAULT_PASSWORD: ((vault-password))
+        # the various installation tools like chezmoi and asdf are kind of flaky
+        attempts: 2
+        timeout: 15m
 
   - name: converge-monitoring
     <<: *job-common
