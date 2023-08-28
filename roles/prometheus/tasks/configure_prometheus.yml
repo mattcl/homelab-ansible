@@ -85,11 +85,25 @@
     group: prometheus
     mode: "0644"
 
+- name: Write prometheus probes json
+  ansible.builtin.template:
+    src: probes.json.j2
+    dest: /etc/prometheus/probes.json
+    owner: prometheus
+    group: prometheus
+    mode: "0644"
+
 - name: Define prometheus service
   ansible.builtin.template:
     src: prometheus.service.j2
     dest: /etc/systemd/system/prometheus.service
     mode: "0644"
+  register: prom_service_conf
+
+- name: Force systemd to reread configs (for restarting)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: start_services|default(false)|bool
 
 - name: Ensure prometheus service is enabled and started
   ansible.builtin.service:
@@ -97,3 +111,9 @@
     name: "prometheus"
     state: "started"
   when: start_services|default(false)|bool
+
+- name: Restart prometheus on service change
+  ansible.builtin.service:
+    name: "prometheus"
+    state: "restarted"
+  when: start_services|default(false)|bool and prom_service_conf.changed

@@ -8,3 +8,7 @@ prometheus_nodes:
   - "sursamen.home:9100"
   - "chiark.home:9100"
   - "vavatch.home:9100"
+
+prometheus_probes:
+  - "probe-01.home:9500"
+  - "probe-02.home:9500"

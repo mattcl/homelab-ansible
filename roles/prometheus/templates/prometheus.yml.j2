@@ -33,3 +33,23 @@ scrape_configs:
     file_sd_configs:
       - files:
         - nodes.json
+
+  - job_name: "probes"
+    file_sd_configs:
+      - files:
+        - probes.json
+
+  - job_name: "ks_metrics"
+    scrape_interval: 1m
+    static_configs:
+      - targets: ["kube-state-metrics.hl.ancalagon.black"]
+
+  - job_name: "traefik"
+    scrape_interval: 30s
+    static_configs:
+      - targets: ["traefik.hl.ancalagon.black"]
+        labels:
+          visibility: internal
+      - targets: ["traefik-external.ancalagon.black"]
+        labels:
+          visibility: external
