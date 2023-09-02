@@ -1,0 +1,6 @@
+---
+- name: Configure probes
+  hosts: probe
+  become: true
+  roles:
+    - role: probe

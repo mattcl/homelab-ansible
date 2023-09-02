@@ -213,6 +213,36 @@ jobs:
           PLAYBOOK: monitoring.yml
           VAULT_PASSWORD: ((vault-password))
 
+  - name: converge-probe
+    <<: *job-common
+    plan:
+      - in_parallel:
+        - get: homelab-ansible
+          trigger: true
+          passed:
+            - lint-and-test
+        - get: ubuntu-22.04
+          trigger: false
+          passed:
+            - lint-and-test
+        - get: nightly-trigger
+          trigger: true
+
+      - task: converge
+        tags:
+          - internal
+        image: ubuntu-22.04
+        file: homelab-ansible/ci/converge.yaml
+        input_mapping:
+          repo: homelab-ansible
+        params:
+          CREATE_USER: matt
+          PLAYBOOK: probe.yml
+          VAULT_PASSWORD: ((vault-password))
+        # the various installation tools like chezmoi and asdf are kind of flaky
+        attempts: 2
+        timeout: 15m
+
   - name: converge-tailscale
     <<: *job-common
     plan:

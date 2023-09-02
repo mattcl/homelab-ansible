@@ -1,0 +1,11 @@
+[Unit]
+Description=Prometheus exporter for BME280
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/bme280_exporter -l '{"zone": "{{ zone }}"}'
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

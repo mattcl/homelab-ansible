@@ -20,6 +20,13 @@ monitoring:
       ansible_connection: local
       name: test-node
 
+probe:
+  hosts:
+    localhost_probe:
+      start_services: false
+      ansible_connection: local
+      zone: test
+
 tailscale:
   hosts:
     localhost_tailscale:

@@ -25,6 +25,15 @@ pihole:
     sursamen.home:
       start_services: true
 
+probe:
+  hosts:
+    probe-03.home:
+      start_services: true
+      zone: garage
+    probe-04.home:
+      start_services: true
+      zone: master
+
 tailscale:
   hosts:
     grey-area.home:

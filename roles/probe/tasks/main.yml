@@ -1,0 +1,67 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg:
+      - build-essential
+      - python3-dev
+      - python3-pip
+    state: present
+    update_cache: true
+
+- name: Install smbus
+  ansible.builtin.pip:
+    name: smbus
+    executable: /usr/bin/pip
+
+- name: Install bme280_exporter
+  ansible.builtin.pip:
+    name: bme280_exporter==0.1.0
+    executable: /usr/bin/pip
+
+# we need to find the file we're looking for
+- name: Find installation
+  ansible.builtin.find:
+    paths: /usr/local/lib
+    file_type: directory
+    recurse: true
+    use_regex: true
+    patterns:
+      - bme280_exporter
+  register: found_installation
+
+# So the source for this no longer seems distributed via github. Instead of
+# forking, we're just going to patch the specific file we need. This is
+# currently a little fragile because we have to find the python version
+- name: Patch exporter
+  ansible.builtin.template:
+    src: __main__.py.j2
+    dest: "{{ item.path }}/__main__.py"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items: "{{ found_installation.files }}"
+
+- name: Define bme280 service
+  ansible.builtin.template:
+    src: bme280.service.j2
+    dest: /etc/systemd/system/bme280.service
+    mode: "0644"
+  register: bme_service_conf
+
+- name: Force systemd to reread configs (for restarting)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: start_services|default(false)|bool
+
+- name: Ensure bme280 service is enabled and started
+  ansible.builtin.service:
+    enabled: true
+    name: "bme280"
+    state: "started"
+  when: start_services|default(false)|bool
+
+- name: Restart bme280 on service change
+  ansible.builtin.service:
+    name: "bme280"
+    state: "restarted"
+  when: start_services|default(false)|bool and bme_service_conf.changed
