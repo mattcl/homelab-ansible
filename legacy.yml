@@ -1,0 +1,6 @@
+---
+- name: Configure legacy nodes
+  hosts: legacy
+  become: true
+  roles:
+    - node_exporter

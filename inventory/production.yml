@@ -39,3 +39,8 @@ tailscale:
     grey-area.home:
       start_services: true
       name: grey-area
+
+legacy:
+  hosts:
+    dibaldipen.home:
+      start_services: true
