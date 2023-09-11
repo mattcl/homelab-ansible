@@ -16,9 +16,8 @@ build_node:
 
 monitoring:
   hosts:
-    192.168.20.188:
+    192.168.40.61:
       start_services: true
-      name: grey-area
 
 pihole:
   hosts:
