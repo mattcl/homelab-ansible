@@ -1,6 +1,7 @@
 ---
 prometheus_nodes:
   - "localhost:9100"
+  - "armchair-traveller.home:9100"
   - "dibaldipen.home:9100"
   - "dinyol-hei.home:9100"
   - "ethics-gradient.home:9100"
