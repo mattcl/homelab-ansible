@@ -54,7 +54,7 @@ nvim_config:
   repo:
     https_url: "https://github.com/mattcl/nvim.git"
     ssh_url: "git@github.com:mattcl/nvim.git"
-  version: "HEAD"
+  version: "lsp-switching"
 
 kubectl:
   version: "v1.27.4"

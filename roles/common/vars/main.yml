@@ -2,7 +2,6 @@
 common_internal:
   apt_packages:
     - curl
-    - exa
     - git
     - htop
     - jq
@@ -26,3 +25,10 @@ common_internal:
       name: "du-dust"
       release: "https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb"
       file: "du-dust_0.8.6_amd64.deb"
+
+  tar_releases:
+    eza:
+      name: "eza"
+      release: "https://github.com/eza-community/eza/releases/download/v0.16.0/eza_x86_64-unknown-linux-gnu.tar.gz"
+      file: "eza_x86_64-unknown-linux-gnu.tar.gz"
+      target: "eza"

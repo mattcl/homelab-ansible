@@ -16,7 +16,7 @@ build_node:
 
 monitoring:
   hosts:
-    192.168.40.61:
+    monitoring.home:
       start_services: true
 
 pihole:
@@ -32,6 +32,17 @@ probe:
     probe-04.home:
       start_services: true
       zone: master
+    # probe-05.home:
+    #   start_services: true
+    #   zone: kitchen
+    probe-05.home:
+      start_services: true
+      zone: dining
+      pep668: true
+    probe-06.home:
+      start_services: true
+      zone: living
+      pep668: true
 
 tailscale:
   hosts:
@@ -42,4 +53,9 @@ tailscale:
 legacy:
   hosts:
     dibaldipen.home:
+      start_services: true
+
+dev_box:
+  hosts:
+    192.168.40.109:
       start_services: true

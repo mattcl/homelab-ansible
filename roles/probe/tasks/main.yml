@@ -8,15 +8,31 @@
     state: present
     update_cache: true
 
+- name: Install smbus debian < 12
+  ansible.builtin.pip:
+    name: smbus
+    executable: /usr/bin/pip
+  when: pep668 is undefined
+
 - name: Install smbus
   ansible.builtin.pip:
     name: smbus
     executable: /usr/bin/pip
+    extra_args: "--break-system-packages"
+  when: pep668 is defined
+
+- name: Install bme280_exporter debian < 12
+  ansible.builtin.pip:
+    name: bme280_exporter==0.1.0
+    executable: /usr/bin/pip
+  when: pep668 is undefined
 
 - name: Install bme280_exporter
   ansible.builtin.pip:
     name: bme280_exporter==0.1.0
     executable: /usr/bin/pip
+    extra_args: "--break-system-packages"
+  when: pep668 is defined
 
 # we need to find the file we're looking for
 - name: Find installation

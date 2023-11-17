@@ -20,6 +20,7 @@
   ansible.builtin.unarchive:
     src: "/tmp/nvim-linux64.tar.gz"
     dest: "/tmp"
+    remote_src: true
   become: true
   become_user: root
   when: "not check_nvim.stat.exists"

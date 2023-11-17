@@ -3,7 +3,7 @@ version: '3'
 services:
   worker:
     hostname: {{ worker_name }}
-    image: concourse/concourse:7.9.1
+    image: concourse/concourse:7.10.0
     command:
       - worker
       - "--containerd-dns-server='192.168.40.1'"

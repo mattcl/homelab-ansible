@@ -16,3 +16,5 @@ prometheus_probes:
   - "probe-02.home:9500"
   - "probe-03.home:9500"
   - "probe-04.home:9500"
+  - "probe-05.home:9500"
+  - "probe-06.home:9500"
