@@ -26,7 +26,7 @@ ohmyzsh:
       version: "HEAD"
 
 fzf:
-  version: 0.42.0
+  version: 0.48.1
 
 pyenv:
   repo_url: "https://github.com/pyenv/pyenv.git"
@@ -37,7 +37,7 @@ pyenv_virtualenv:
   version: "HEAD"
 
 asdf:
-  version: "v0.12.0"
+  version: "v0.14.0"
 
 asdf_plugins:
   nodejs: https://github.com/asdf-vm/asdf-nodejs.git
@@ -48,7 +48,7 @@ dotfiles:
     ssh_url: "git@github.com:mattcl/dotfiles.git"
 
 nvim:
-  version: v0.9.1
+  version: v0.9.5
 
 nvim_config:
   repo:

@@ -18,17 +18,17 @@ common_internal:
   deb_releases:
     bat:
       name: "bat"
-      release: "https://github.com/sharkdp/bat/releases/download/v0.23.0/bat-musl_0.23.0_amd64.deb"
-      file: "bat-musl_0.23.0_amd64.deb"
+      release: "https://github.com/sharkdp/bat/releases/download/v0.24.0/bat-musl_0.24.0_amd64.deb"
+      file: "bat-musl_0.24.0_amd64.deb"
 
     dust:
       name: "du-dust"
-      release: "https://github.com/bootandy/dust/releases/download/v0.8.6/du-dust_0.8.6_amd64.deb"
-      file: "du-dust_0.8.6_amd64.deb"
+      release: "https://github.com/bootandy/dust/releases/download/v0.9.0/du-dust_0.9.0-1_amd64.deb"
+      file: "du-dust_0.9.0-1_amd64.deb"
 
   tar_releases:
     eza:
       name: "eza"
-      release: "https://github.com/eza-community/eza/releases/download/v0.16.0/eza_x86_64-unknown-linux-gnu.tar.gz"
+      release: "https://github.com/eza-community/eza/releases/download/v0.18.8/eza_x86_64-unknown-linux-gnu.zip"
       file: "eza_x86_64-unknown-linux-gnu.tar.gz"
       target: "eza"
