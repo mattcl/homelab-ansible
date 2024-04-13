@@ -46,4 +46,25 @@
     owner: "root"
     group: "root"
     mode: "0644"
-    force: false
+    force: true
+
+- name: Configure docker service
+  ansible.builtin.template:
+    src: docker.service.j2
+    dest: "/lib/systemd/system/docker.service"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    force: true
+  register: docker_service_conf
+
+- name: Force systemd to reread configs (for restarting)
+  ansible.builtin.systemd:
+    daemon_reload: true
+  when: start_services|default(false)|bool
+
+- name: Restart docker on service change
+  ansible.builtin.service:
+    name: "node_exporter"
+    state: "restarted"
+  when: start_services|default(false)|bool and docker_service_conf.changed

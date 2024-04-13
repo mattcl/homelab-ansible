@@ -1,2 +1,3 @@
 ---
 dev_user: matt
+danger_docker_expose_socket: true

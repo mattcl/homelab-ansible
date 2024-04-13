@@ -7,6 +7,7 @@ common_internal:
     - jq
     - lm-sensors
     - fd-find
+    - net-tools
     - powertop
     - ripgrep
     - tmux

@@ -11,6 +11,7 @@ docker_ci_worker:
     localhost_docker_ci_worker_node:
       start_services: false
       ansible_connection: local
+      danger_docker_expose_socket: true
 
 dev_box:
   hosts:
