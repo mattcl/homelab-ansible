@@ -38,3 +38,12 @@
     name: "{{ dev_user }}"
     groups: docker
     append: true
+
+- name: Restrict docker default subnets
+  ansible.builtin.template:
+    src: daemon.json
+    dest: "/etc/docker/daemon.json"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    force: false

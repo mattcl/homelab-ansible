@@ -6,6 +6,12 @@ build_node:
       worker_name: test-worker
       worker_tags: "testonly"
 
+docker_ci_worker:
+  hosts:
+    localhost_docker_ci_worker_node:
+      start_services: false
+      ansible_connection: local
+
 dev_box:
   hosts:
     localhost_dev_box:

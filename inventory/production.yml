@@ -59,3 +59,8 @@ dev_box:
   hosts:
     192.168.40.109:
       start_services: true
+
+docker_ci_worker:
+  hosts:
+    docker-ci-worker-01.home:
+      start_services: true
