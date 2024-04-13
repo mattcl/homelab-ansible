@@ -10,7 +10,7 @@ Type=notify
 # the default is not to use systemd for cgroups because the delegate issues still
 # exists and systemd currently does not support the cgroup feature set required
 # for containers run by docker
-ExecStart=/usr/bin/dockerd -H fd:// {% if danger_docker_expose_socket is defined and danger_docker_expose_socket %}-H tcp://127.0.0.1:2375 {% endif %}--containerd=/run/containerd/containerd.sock
+ExecStart=/usr/bin/dockerd -H fd:// {% if danger_docker_expose_socket is defined and danger_docker_expose_socket %}-H tcp://0.0.0.0:2376 {% endif %}--containerd=/run/containerd/containerd.sock
 ExecReload=/bin/kill -s HUP $MAINPID
 TimeoutStartSec=0
 RestartSec=2

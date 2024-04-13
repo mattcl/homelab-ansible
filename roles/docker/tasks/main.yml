@@ -65,6 +65,6 @@
 
 - name: Restart docker on service change
   ansible.builtin.service:
-    name: "node_exporter"
+    name: "docker"
     state: "restarted"
   when: start_services|default(false)|bool and docker_service_conf.changed
