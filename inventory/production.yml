@@ -26,6 +26,9 @@ pihole:
 
 probe:
   hosts:
+    probe-01.home:
+      start_services: true
+      zone: office
     probe-03.home:
       start_services: true
       zone: garage
